@@ -1,0 +1,15 @@
+{
+  "name": "GlowPay Super",
+  "short_name": "GlowPay",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#070a07",
+  "theme_color": "#eaff00",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/138/138292.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
