@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,8 +34,8 @@ input{width:100%;box-sizing:border-box;background:#000;border:1px solid #333;bor
 <div class="card">
 <div class="t">💰 LIPA NA M-PESA (DEMO)</div>
 Paybill: <b>547700</b> | Acc: <b>7719636698</b>
-<input id="code" placeholder="Weka M-Pesa Code">
-<button class="g" onclick="verify()">Verify + Add 500</button>
+<input id="code" placeholder="Weka M-Pesa Code (andika chochote)">
+<button class="g" onclick="verify()">Verify + Add 1000</button>
 <div class="balance" style="margin-top:10px">Balance: KES <span id="bal">0</span></div>
 </div>
 
@@ -50,7 +49,7 @@ Paybill: <b>547700</b> | Acc: <b>7719636698</b>
 <div id="g1" class="game active">
 <div class="card">
 <div class="t">🎲 RISK & EARN</div>
-<input id="stake1" type="number" placeholder="Kiasi 50-5000">
+<input id="stake1" type="number" placeholder="Kiasi 50-5000" value="100">
 <div class="btns">
 <button id="l" onclick="setM(1.2,'l')">Low x1.2</button>
 <button id="m" class="active" onclick="setM(2,'m')">Med x2</button>
@@ -65,7 +64,7 @@ Paybill: <b>547700</b> | Acc: <b>7719636698</b>
 <div class="card">
 <div class="t">✈️ AVIATOR</div>
 <div class="avi"><div id="plane">✈️</div><div id="mult">1.00x</div><div id="astatus" style="font-size:12px;color:#0f6">BETTING OPEN</div></div>
-<input id="stake2" type="number" placeholder="Bet amount">
+<input id="stake2" type="number" placeholder="Bet amount" value="100">
 <div class="btns">
 <button class="g" onclick="startAvi()">BET / FLY</button>
 <button class="y" onclick="cashoutAvi()">CASHOUT</button>
@@ -77,4 +76,53 @@ Paybill: <b>547700</b> | Acc: <b>7719636698</b>
 <div id="g3" class="game">
 <div class="card">
 <div class="t">🎯 DICE - Chagua 1-6</div>
-<input id="stake3" type="number" placeholder="
+<input id="stake3" type="number" placeholder="Kiasi" value="100">
+<div class="btns">
+<button onclick="playDice(1)">1</button><button onclick="playDice(2)">2</button><button onclick="playDice(3)">3</button>
+<button onclick="playDice(4)">4</button><button onclick="playDice(5)">5</button><button onclick="playDice(6)">6</button>
+</div>
+<div id="r3" style="text-align:center;margin-top:8px"></div>
+<div class="small">Ukigonga namba yako unapata x5</div>
+</div>
+</div>
+
+<div id="g4" class="game">
+<div class="card">
+<div class="t">🔴🟢 COLOR PREDICT</div>
+<input id="stake4" type="number" placeholder="Kiasi" value="100">
+<div class="btns">
+<button style="background:#ff1744;color:#fff;border:0" onclick="playColor('red')">RED x2</button>
+<button style="background:#00e676;color:#000;border:0" onclick="playColor('green')">GREEN x2</button>
+<button style="background:#7c4dff;color:#fff;border:0" onclick="playColor('violet')">VIOLET x4.5</button>
+</div>
+<div id="r4" style="text-align:center;margin-top:8px"></div>
+</div>
+</div>
+
+<div class="card" style="border:1.5px dashed #eaff00">
+<div class="t">💸 TOA PESA - WITHDRAW</div>
+<input id="wamt" type="number" placeholder="Kiasi cha kutoa (min 100)">
+<input id="wphone" placeholder="Namba ya M-Pesa 07...">
+<button class="y" style="background:#fff" onclick="withdraw()">Withdraw via WhatsApp</button>
+<div class="small">Ukishinda, pesa inakatwa kwa balance na ujumbe unakuja kwangu WhatsApp nikulipe manual.</div>
+</div>
+
+<script>
+let bal=parseInt(localStorage.getItem('glow_bal')||'0');
+let mult=2;
+let aviRun=false, aviVal=1.0, aviTimer=null, aviBet=0, aviCrash=0;
+let aviCashed=false;
+function upd(){document.getElementById('bal').innerText=bal;localStorage.setItem('glow_bal',bal);}
+upd();
+function openG(gid,tid){document.querySelectorAll('.game').forEach(g=>g.classList.remove('active'));document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active'));document.getElementById(gid).classList.add('active');document.getElementById(tid).classList.add('active');}
+function setM(m,id){mult=m;document.querySelectorAll('#g1 .btns button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function verify(){bal+=1000;upd();alert('Imeongezwa KES 1000! Sasa cheza.');document.getElementById('code').value='';}
+function playRisk(){let a=parseInt(document.getElementById('stake1').value);if(!a||a>bal||a<10)return alert('Balance haitoshi');let win=Math.random()>0.45;if(win){let p=Math.floor(a*mult);bal+=p;document.getElementById('r1').innerHTML='<span style=color:#0f6>WIN +'+p+'</span>';}else{bal-=a;document.getElementById('r1').innerHTML='<span style=color:#f44>LOST -'+a+'</span>';}upd();}
+function startAvi(){if(aviRun)return alert('Ndege iko hewani!');let a=parseInt(document.getElementById('stake2').value);if(!a||a>bal)return alert('Balance haitoshi');aviBet=a;aviCrash=(Math.random()*4+1.1);aviVal=1.0;aviRun=true;aviCashed=false;document.getElementById('astatus').innerText='FLYING...';document.getElementById('r2').innerText='';aviTimer=setInterval(()=>{aviVal+=0.04+aviVal*0.02;document.getElementById('mult').innerText=aviVal.toFixed(2)+'x';document.getElementById('plane').style.left=(10+aviVal*8)+'%';document.getElementById('plane').style.bottom=(20+aviVal*5)+'%';if(aviVal>=aviCrash){clearInterval(aviTimer);aviRun=false;if(!aviCashed){bal-=aviBet;upd();document.getElementById('r2').innerHTML='<span style=color:#f44>CRASHED @ '+aviVal.toFixed(2)+'x - LOST '+aviBet+'</span>';document.getElementById('astatus').innerText='CRASHED';}setTimeout(()=>{document.getElementById('mult').innerText='1.00x';document.getElementById('plane').style.left='10%';document.getElementById('plane').style.bottom='20%';},1500);}},120);}
+function cashoutAvi(){if(!aviRun||aviCashed)return;aviCashed=true;clearInterval(aviTimer);aviRun=false;let win=Math.floor(aviBet*aviVal)-aviBet;bal+=win;upd();document.getElementById('r2').innerHTML='<span style=color:#0f6>CASHOUT @ '+aviVal.toFixed(2)+'x WIN +'+win+'</span>';document.getElementById('astatus').innerText='CASHED OUT';}
+function playDice(n){let a=parseInt(document.getElementById('stake3').value);if(!a||a>bal)return alert('Weka kiasi');let roll=Math.floor(Math.random()*6)+1;if(roll==n){let p=a*5;bal+=p;document.getElementById('r3').innerHTML='🎲 Imetoka '+roll+' <span style=color:#0f6>WIN +'+p+'</span>';}else{bal-=a;document.getElementById('r3').innerHTML='🎲 Imetoka '+roll+' <span style=color:#f44>LOST -'+a+'</span>';}upd();}
+function playColor(c){let a=parseInt(document.getElementById('stake4').value);if(!a||a>bal)return alert('Weka kiasi');let r=Math.random();let res=r<0.48?'red':r<0.96?'green':'violet';let win=false, mul=2;if(c==res)win=true;if(c=='violet'&&res=='violet'){mul=4.5;win=true;}else if(c=='violet')win=false;if(win){let p=Math.floor(a*mul)-a;if(c=='violet')p=Math.floor(a*4.5)-a;bal+=p;document.getElementById('r4').innerHTML='Imeanguka '+res.toUpperCase()+' <span style=color:#0f6>WIN +'+p+'</span>';}else{bal-=a;document.getElementById('r4').innerHTML='Imeanguka '+res.toUpperCase()+' <span style=color:#f44>LOST -'+a+'</span>';}upd();}
+function withdraw(){let am=parseInt(document.getElementById('wamt').value);let ph=document.getElementById('wphone').value;if(!am||am<100)return alert('Min 100');if(am>bal)return alert('Balance haitoshi');if(ph.length<10)return alert('Weka namba sahihi');let my='2547719636698';let msg=encodeURIComponent('GlowPay WITHDRAW\nKiasi: KES '+am+'\nNamba: '+ph+'\nBalance: '+(bal-am));bal-=am;upd();window.open('https://wa.me/'+my+'?text='+msg,'_blank');}
+</script>
+</body>
+</html>
