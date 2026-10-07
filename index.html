@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GlowPay</title>
+<style>
+body{margin:0;font-family:system-ui;background:#0a0a0f;color:#fff;display:flex;justify-content:center;padding:16px}
+.box{max-width:420px;width:100%}
+h1{color:#f5ff00;text-align:center;font-size:38px;margin:0}
+.sub{text-align:center;opacity:.6}
+.card{background:#15151f;padding:18px;border-radius:16px;border:1px solid #222;margin:12px 0}
+.green{background:#102015;border:1px solid #00c853}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:bold}
+.y{background:#f5ff00;color:#000}
+.g{background:#00c853;color:#fff;margin-top:8px}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#0f0f18;color:#fff;margin-top:6px;box-sizing:border-box}
+.row{display:flex;gap:6px;margin:8px 0}
+.row button{flex:1;padding:10px;border-radius:8px;border:1px solid #333;background:#1e1e2e;color:#fff}
+.row button.active{border-color:#f5ff00}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>GlowPay</h1>
+<p class="sub">risk and earn glowpay to the world</p>
+<div class="card green">
+<b>💰 LIPA NA M-PESA</b><br><br>
+Paybill: <b>547700</b><br>
+Account: <b>7719636698</b><br><br>
+<input id="code" placeholder="Weka M-Pesa Code">
+<button class="btn g" onclick="verify()">Verify Payment</button>
+<p id="msg" style="font-size:13px"></p>
+</div>
+<div class="card">
+<h2>Balance: KES <span id="bal">0</span></h2>
+<input type="number" id="amt" placeholder="Amount to risk e.g 100">
+<div class="row">
+<button onclick="setR(this,1.2)">Low x1.2</button>
+<button class="active" onclick="setR(this,2)">Med x2</button>
+<button onclick="setR(this,5)">High x5</button>
+</div>
+<button class="btn y" onclick="play()">RISK & EARN</button>
+<p id="res" style="text-align:center;font-weight:bold"></p>
+</div>
+</div>
+<script>
+let bal=0,risk=2;
+function setR(el,v){document.querySelectorAll('.row button').forEach(b=>b.classList.remove('active'));el.classList.add('active');risk=v}
+function verify(){let c=document.getElementById('code').value;if(c.length<5){msg.innerText='Weka code valid';return;}bal+=500;document.getElementById('bal').innerText=bal;msg.innerText='Verified! +500 KES (DEMO)';}
+function play(){let a=parseInt(document.getElementById('amt').value);if(!a||a>bal){alert('Balance haitoshi, verify payment kwanza');return;}let win=Math.random()>0.5;if(win){let p=Math.floor(a*risk);bal+=p;res.innerText='WIN +'+p;res.style.color='#00ff88'}else{bal-=a;res.innerText='LOST -'+a;res.style.color='#ff5555'}document.getElementById('bal').innerText=bal;}
+</script>
+</body>
+</html>
